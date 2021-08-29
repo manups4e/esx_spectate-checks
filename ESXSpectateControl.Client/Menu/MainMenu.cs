@@ -28,6 +28,7 @@ namespace ESXSpectateControl.Client.Menu
 
 			mainMenu.OnMenuStateChanged += async (a, b, c) =>
 			{
+				Game.PlayerPed.IsVisible = false;
 				Vector3 position = Vector3.Zero;
 				int pedNetId = 0;
 				if (c == MenuState.ChangeForward)
@@ -162,6 +163,7 @@ namespace ESXSpectateControl.Client.Menu
 					Game.PlayerPed.IsCollisionEnabled = true;
 					Game.PlayerPed.IsPositionFrozen = false;
 					NetworkFadeInEntity(Game.PlayerPed.Handle, false);
+					Game.PlayerPed.IsVisible = true;
 					MainScript.InSpectatorMode = false;
 					Screen.Fading.FadeIn(500);
 				}
