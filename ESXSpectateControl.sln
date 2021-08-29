@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESXSpectateControl.Client", "ESXSpectateControl.Client\ESXSpectateControl.Client.csproj", "{DE290A86-B8BE-4768-A19C-BE40DDA83A4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESXSpectateControl.Server", "ESXSpectateControl.Server\ESXSpectateControl.Server.csproj", "{B14D0126-2461-45A2-9D9F-97404E39DC22}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE290A86-B8BE-4768-A19C-BE40DDA83A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE290A86-B8BE-4768-A19C-BE40DDA83A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE290A86-B8BE-4768-A19C-BE40DDA83A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE290A86-B8BE-4768-A19C-BE40DDA83A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B14D0126-2461-45A2-9D9F-97404E39DC22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B14D0126-2461-45A2-9D9F-97404E39DC22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B14D0126-2461-45A2-9D9F-97404E39DC22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B14D0126-2461-45A2-9D9F-97404E39DC22}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C09921C8-9649-4682-98F6-5603602ED0BC}
+	EndGlobalSection
+EndGlobal
