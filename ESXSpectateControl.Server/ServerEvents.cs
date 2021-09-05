@@ -78,9 +78,6 @@ namespace ESXSpectateControl.Server
 
 				Vector3 pos = player.Character.Position;
 				int netid = player.Character.NetworkId;
-				ServerMain.Logger.Debug(netid.ToString());
-				ServerMain.Logger.Debug(pos.ToString());
-				ServerMain.Logger.Debug(netid.ToString());
 				object returning = new
 				{
 					money,
