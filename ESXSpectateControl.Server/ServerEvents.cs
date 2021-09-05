@@ -15,6 +15,7 @@ namespace ESXSpectateControl.Server
 			ServerMain.Instance.ESX.RegisterServerCallback("spectate:getOtherPlayerData", new Action<int, dynamic, int>(GetOtherPlayerData));
 			ServerMain.Instance.AddEventHandler("spectate:CheckAdmin", new Action<Player>(CheckIsAdmin));
 			ServerMain.Instance.AddEventHandler("spectate:spectate", new Action<Player>(spectate));
+			ServerMain.Instance.AddEventHandler("RestoreCulling", new Action<Player, int>(RestoreCullingRadius));
 		}
 
 		private static async void spectate([FromSource] Player player)
@@ -60,6 +61,7 @@ namespace ESXSpectateControl.Server
 			try
 			{
 				Player player = ServerMain.Instance.GetPlayers[d];
+				API.SetEntityDistanceCullingRadius(player.Character.Handle, 5000f);
 				dynamic xPlayer = ServerMain.Instance.ESX.GetPlayerFromId(d);
 				await BaseScript.Delay(0);
 				// using identifier
@@ -99,6 +101,12 @@ namespace ESXSpectateControl.Server
 			{
 				ServerMain.Logger.Error(e.ToString());
 			}
+		}
+
+		private static void RestoreCullingRadius([FromSource] Player player, int netId)
+		{
+			var entity = (Ped)Entity.FromNetworkId(netId);
+			API.SetEntityDistanceCullingRadius(entity.Handle, 0f);
 		}
 	}
 }

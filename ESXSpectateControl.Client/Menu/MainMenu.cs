@@ -28,7 +28,6 @@ namespace ESXSpectateControl.Client.Menu
 
 			mainMenu.OnMenuStateChanged += async (a, b, c) =>
 			{
-				Game.PlayerPed.IsVisible = false;
 				Vector3 position = Vector3.Zero;
 				int pedNetId = 0;
 				if (c == MenuState.ChangeForward)
@@ -37,6 +36,7 @@ namespace ESXSpectateControl.Client.Menu
 					Screen.Fading.FadeOut(500);
 					await BaseScript.Delay(600);
 
+					Game.PlayerPed.IsVisible = false;
 					var infoMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Info"]);
 					var invMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Inventory"]);
 					var weapMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Weapons"]);
@@ -147,6 +147,7 @@ namespace ESXSpectateControl.Client.Menu
 								Game.PlayerPed.AttachTo((Ped)Entity.FromNetworkId(pedNetId));
 							await BaseScript.Delay(250);
 						}
+						SetFocusEntity(ped.Handle);
 						MainScript.spectatingPlayer = new(NetworkGetPlayerIndexFromPed(ped.Handle));
 						while (infoMenu.MenuItems.Count == 0) await BaseScript.Delay(2000);
 						MainScript.InSpectatorMode = true;
@@ -157,6 +158,7 @@ namespace ESXSpectateControl.Client.Menu
 				{
 					Screen.Fading.FadeOut(500);
 					await BaseScript.Delay(600);
+					BaseScript.TriggerEvent("RestoreCulling", Game.PlayerPed.GetEntityAttachedTo().NetworkId);
 					Game.PlayerPed.Detach();
 					Game.PlayerPed.Position = lastPosition;
 					ClearFocus();
