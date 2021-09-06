@@ -18,11 +18,14 @@ namespace ESXSpectateControl.Client.Menu
 		{
 			UIMenu mainMenu = new("Spectate", "Choose the Player");
 			mainMenu.MouseControlsEnabled = false;
+			mainMenu.ControlDisablingEnabled = true;
 			MainScript.MenuPool.Add(mainMenu);
 			Dictionary<int, string> people = jsonPlayers.FromJson<Dictionary<int, string>>();
 			foreach(var p in people)
 			{
 				UIMenu pMenu = MainScript.MenuPool.AddSubMenu(mainMenu, p.Value + $" [{p.Key}]");
+				pMenu.MouseControlsEnabled = false;
+				mainMenu.ControlDisablingEnabled = false;
 				pMenu.ParentItem.ItemData = new { Handle = p.Key, Name = p.Value };
 			}
 
@@ -144,7 +147,7 @@ namespace ESXSpectateControl.Client.Menu
 						{
 							ped = World.GetAllPeds().FirstOrDefault(x => x.NetworkId == pedNetId);
 							if (ped != null)
-								Game.PlayerPed.AttachTo((Ped)Entity.FromNetworkId(pedNetId));
+								Game.PlayerPed.AttachTo((Ped)Entity.FromNetworkId(pedNetId), new(0, 0.2f, 0));
 							await BaseScript.Delay(250);
 						}
 						SetFocusEntity(ped.Handle);
