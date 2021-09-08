@@ -43,6 +43,12 @@ namespace ESXSpectateControl.Client.Script
 			Game.EnableControlThisFrame(0, Control.PushToTalk);
 			Game.EnableControlThisFrame(1, Control.PushToTalk);
 			Game.EnableControlThisFrame(2, Control.PushToTalk);
+			Game.EnableControlThisFrame(0, Control.LookLeftRight);
+			Game.EnableControlThisFrame(1, Control.LookLeftRight);
+			Game.EnableControlThisFrame(2, Control.LookLeftRight);
+			Game.EnableControlThisFrame(0, Control.LookUpDown);
+			Game.EnableControlThisFrame(1, Control.LookUpDown);
+			Game.EnableControlThisFrame(2, Control.LookUpDown);
 
 			Notifications.DrawText(0.35f, 0.7f, $"GodMode: {(ped.IsInvincible ? $"~r~{ClientMain.Texts["Enabled"]}~w~." : $"~g~{ClientMain.Texts["Disabled"]}~w~")}");
 			if (!ped.IsInVehicle())
@@ -90,7 +96,6 @@ namespace ESXSpectateControl.Client.Script
 					pos.Y += 0.024f;
 				}
 			}
-
 		}
 	}
 }
