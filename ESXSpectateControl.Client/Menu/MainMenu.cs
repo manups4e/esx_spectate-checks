@@ -143,6 +143,7 @@ namespace ESXSpectateControl.Client.Menu
 						Game.PlayerPed.IsCollisionEnabled = false;
 						Game.PlayerPed.IsPositionFrozen = true;
 						Game.PlayerPed.Position = position;
+						SetEntityProofs(Game.PlayerPed.Handle, true, true, true, true, true, true, true, true);
 						Ped ped = null;
 						while (ped is null)
 						{
@@ -170,6 +171,7 @@ namespace ESXSpectateControl.Client.Menu
 					Game.PlayerPed.IsPositionFrozen = false;
 					NetworkFadeInEntity(Game.PlayerPed.Handle, false);
 					Game.PlayerPed.IsInvincible = false;
+					SetEntityProofs(Game.PlayerPed.Handle, false, false, false, false, false, false, false, false);
 					Game.PlayerPed.IsVisible = true;
 					MainScript.InSpectatorMode = false;
 					Screen.Fading.FadeIn(500);
