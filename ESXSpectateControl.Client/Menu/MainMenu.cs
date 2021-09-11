@@ -153,7 +153,7 @@ namespace ESXSpectateControl.Client.Menu
 						{
 							ped = World.GetAllPeds().FirstOrDefault(x => x.NetworkId == pedNetId);
 							if (ped is not null)
-								Game.PlayerPed.AttachTo(ped, new(ped.Position.X, ped.Position.Y, ped.Position.Z - 2f));
+								Game.PlayerPed.AttachTo(ped, new(0, 0, -2f));
 							await BaseScript.Delay(250);
 						}
 						SetFocusEntity(ped.Handle);

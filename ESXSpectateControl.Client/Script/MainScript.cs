@@ -80,8 +80,8 @@ namespace ESXSpectateControl.Client.Script
 				zoom += rtNorm;
 				zoom -= zoomingWheel;
 
-				if (zoom <= -20f)
-					zoom = -20f;
+				if (zoom <= -40f)
+					zoom = -40f;
 				if (zoom >= -2.5f)
 					zoom = -2.5f;
 			}
