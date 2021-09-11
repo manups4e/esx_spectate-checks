@@ -13,19 +13,18 @@ namespace ESXSpectateControl.Client.Menu
 {
 	static class MainMenu
 	{
-		private static Vector3 lastPosition;
 		public static async void Open(string jsonPlayers)
 		{
+			if (MainScript.MenuPool.IsAnyMenuOpen()) return;
 			UIMenu mainMenu = new("Spectate", "Choose the Player");
 			mainMenu.MouseControlsEnabled = false;
-			mainMenu.ControlDisablingEnabled = true;
 			MainScript.MenuPool.Add(mainMenu);
 			Dictionary<int, string> people = jsonPlayers.FromJson<Dictionary<int, string>>();
 			foreach(var p in people)
 			{
 				UIMenu pMenu = MainScript.MenuPool.AddSubMenu(mainMenu, p.Value + $" [{p.Key}]");
 				pMenu.MouseControlsEnabled = false;
-				mainMenu.ControlDisablingEnabled = false;
+				pMenu.MouseWheelControlEnabled = false;
 				pMenu.ParentItem.ItemData = new { Handle = p.Key, Name = p.Value };
 			}
 
@@ -39,12 +38,16 @@ namespace ESXSpectateControl.Client.Menu
 					Screen.Fading.FadeOut(500);
 					await BaseScript.Delay(600);
 
-					Game.PlayerPed.IsVisible = false;
 					var infoMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Info"]);
+					infoMenu.MouseWheelControlEnabled = false;
 					var invMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Inventory"]);
+					invMenu.MouseWheelControlEnabled = false;
 					var weapMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Weapons"]);
+					weapMenu.MouseWheelControlEnabled = false;
 					var vehMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Vehicles"]);
+					vehMenu.MouseWheelControlEnabled = false;
 					var propMenu = MainScript.MenuPool.AddSubMenu(b, ClientMain.Texts["Properties"]);
+					propMenu.MouseWheelControlEnabled = false;
 
 					int handle = b.ParentItem.ItemData.Handle;
 					string PlayerName = b.ParentItem.ItemData.Name;
@@ -137,23 +140,17 @@ namespace ESXSpectateControl.Client.Menu
 								propMenu.AddItem(propItem);
 							}
 						}
-						lastPosition = Game.PlayerPed.Position;
-						NetworkFadeOutEntity(Game.PlayerPed.Handle, true, false);
-						Game.PlayerPed.IsInvincible = true;
-						Game.PlayerPed.IsCollisionEnabled = false;
-						Game.PlayerPed.IsPositionFrozen = true;
-						Game.PlayerPed.Position = position;
 						SetEntityProofs(Game.PlayerPed.Handle, true, true, true, true, true, true, true, true);
 						Ped ped = null;
 						while (ped is null)
 						{
 							ped = World.GetAllPeds().FirstOrDefault(x => x.NetworkId == pedNetId);
-							if (ped != null)
-								Game.PlayerPed.AttachTo((Ped)Entity.FromNetworkId(pedNetId), new(0, 0.2f, 0));
 							await BaseScript.Delay(250);
 						}
 						SetFocusEntity(ped.Handle);
 						MainScript.spectatingPlayer = new(NetworkGetPlayerIndexFromPed(ped.Handle));
+						MainScript.spectatingCamera = World.CreateCamera(ped.Position, ped.Rotation, GameplayCamera.FieldOfView);
+						RenderScriptCams(true, false, 100, true, true);
 						while (infoMenu.MenuItems.Count == 0) await BaseScript.Delay(2000);
 						MainScript.InSpectatorMode = true;
 						Screen.Fading.FadeIn(500);
@@ -161,19 +158,13 @@ namespace ESXSpectateControl.Client.Menu
 				}
 				else if (c == MenuState.ChangeBackward)
 				{
+					BaseScript.TriggerEvent("RestoreCulling", MainScript.spectatingPlayer.Character.NetworkId);
 					Screen.Fading.FadeOut(500);
 					await BaseScript.Delay(600);
-					BaseScript.TriggerEvent("RestoreCulling", Game.PlayerPed.GetEntityAttachedTo().NetworkId);
-					Game.PlayerPed.Detach();
-					Game.PlayerPed.Position = lastPosition;
+					RenderScriptCams(false, false, 100, true, true);
 					ClearFocus();
-					Game.PlayerPed.IsCollisionEnabled = true;
-					Game.PlayerPed.IsPositionFrozen = false;
-					NetworkFadeInEntity(Game.PlayerPed.Handle, false);
-					Game.PlayerPed.IsInvincible = false;
-					SetEntityProofs(Game.PlayerPed.Handle, false, false, false, false, false, false, false, false);
-					Game.PlayerPed.IsVisible = true;
 					MainScript.InSpectatorMode = false;
+					await BaseScript.Delay(1000);
 					Screen.Fading.FadeIn(500);
 				}
 			};
