@@ -13,6 +13,7 @@ namespace ESXSpectateControl.Client.Menu
 {
 	static class MainMenu
 	{
+		private static Vector3 lastPosition;
 		public static async void Open(string jsonPlayers)
 		{
 			if (MainScript.MenuPool.IsAnyMenuOpen()) return;
@@ -140,14 +141,21 @@ namespace ESXSpectateControl.Client.Menu
 								propMenu.AddItem(propItem);
 							}
 						}
+						lastPosition = Game.PlayerPed.Position;
+						NetworkFadeOutEntity(Game.PlayerPed.Handle, true, false);
+						Game.PlayerPed.IsInvincible = true;
+						Game.PlayerPed.IsCollisionEnabled = false;
+						Game.PlayerPed.IsPositionFrozen = true;
+						Game.PlayerPed.Position = position;
 						SetEntityProofs(Game.PlayerPed.Handle, true, true, true, true, true, true, true, true);
 						Ped ped = null;
 						while (ped is null)
 						{
 							ped = World.GetAllPeds().FirstOrDefault(x => x.NetworkId == pedNetId);
+							if (ped is not null)
+								Game.PlayerPed.AttachTo(ped, new(ped.Position.X, ped.Position.Y, ped.Position.Z - 2f));
 							await BaseScript.Delay(250);
 						}
-						Game.PlayerPed.IsPositionFrozen = true;
 						SetFocusEntity(ped.Handle);
 						MainScript.spectatingPlayer = new(NetworkGetPlayerIndexFromPed(ped.Handle));
 						MainScript.spectatingCamera = World.CreateCamera(ped.Position, ped.Rotation, GameplayCamera.FieldOfView);
@@ -162,9 +170,16 @@ namespace ESXSpectateControl.Client.Menu
 					BaseScript.TriggerEvent("RestoreCulling", MainScript.spectatingPlayer.Character.NetworkId);
 					Screen.Fading.FadeOut(500);
 					await BaseScript.Delay(600);
+					Game.PlayerPed.Detach();
+					Game.PlayerPed.Position = lastPosition;
+					Game.PlayerPed.IsCollisionEnabled = true;
+					Game.PlayerPed.IsInvincible = false;
+					SetEntityProofs(Game.PlayerPed.Handle, false, false, false, false, false, false, false, false);
+					Game.PlayerPed.IsPositionFrozen = false;
+					NetworkFadeInEntity(Game.PlayerPed.Handle, false);
+					Game.PlayerPed.IsVisible = true;
 					RenderScriptCams(false, false, 100, true, true);
 					ClearFocus();
-					Game.PlayerPed.IsPositionFrozen = false;
 					MainScript.InSpectatorMode = false;
 					await BaseScript.Delay(1000);
 					Screen.Fading.FadeIn(500);
