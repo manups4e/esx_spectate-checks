@@ -147,6 +147,7 @@ namespace ESXSpectateControl.Client.Menu
 							ped = World.GetAllPeds().FirstOrDefault(x => x.NetworkId == pedNetId);
 							await BaseScript.Delay(250);
 						}
+						Game.PlayerPed.IsPositionFrozen = true;
 						SetFocusEntity(ped.Handle);
 						MainScript.spectatingPlayer = new(NetworkGetPlayerIndexFromPed(ped.Handle));
 						MainScript.spectatingCamera = World.CreateCamera(ped.Position, ped.Rotation, GameplayCamera.FieldOfView);
@@ -163,6 +164,7 @@ namespace ESXSpectateControl.Client.Menu
 					await BaseScript.Delay(600);
 					RenderScriptCams(false, false, 100, true, true);
 					ClearFocus();
+					Game.PlayerPed.IsPositionFrozen = false;
 					MainScript.InSpectatorMode = false;
 					await BaseScript.Delay(1000);
 					Screen.Fading.FadeIn(500);
