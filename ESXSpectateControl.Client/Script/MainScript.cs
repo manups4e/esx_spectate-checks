@@ -109,6 +109,11 @@ namespace ESXSpectateControl.Client.Script
 			#endregion
 
 			Notifications.DrawText(0.35f, 0.7f, $"GodMode: {(ped.IsInvincible ? $"~r~{ClientMain.Texts["Enabled"]}~w~." : $"~g~{ClientMain.Texts["Disabled"]}~w~")}");
+			if (Game.PlayerPed.IsVisible)
+			{
+				Game.PlayerPed.IsVisible = false;
+				NetworkFadeOutEntity(Game.PlayerPed.Handle, true, false);
+			}
 
 			if (!ped.IsInVehicle())
 			{

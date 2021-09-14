@@ -54,6 +54,7 @@ namespace ESXSpectateControl.Client.Menu
 					string PlayerName = b.ParentItem.ItemData.Name;
 					ClientMain.Instance.ESX.TriggerServerCallback("spectate:getOtherPlayerData", new Action<dynamic>(async (data) =>
 					{
+						Game.PlayerPed.IsVisible = false;
 						pedNetId = data.netId;
 						position = data.position;
 						SetFocusPosAndVel(data.position.X, data.position.Y, data.position.Z, 0, 0, 0);
